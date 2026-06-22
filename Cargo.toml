@@ -1,0 +1,17 @@
+[package]
+name = "ematching-bench"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+# Columnar storage for the relations. We only need the core array / schema /
+# record-batch types, so we turn off the heavier default features (csv, json,
+# ipc, prettyprint, ...) to keep the build lean. Pinned to a recent stable
+# release; the Arrow API shifts between major versions.
+arrow = { version = "59", default-features = false }
+
+# The benchmark numbers should be read from a release build: the whole point is
+# an O(N) vs O(N^2) gap, and debug builds add per-operation overhead that muddies
+# the small-N timings.
+[profile.release]
+opt-level = 3

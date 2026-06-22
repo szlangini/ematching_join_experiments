@@ -1,0 +1,21 @@
+# Python dependencies for the e-matching benchmark notebooks.
+# Install into a fresh virtual environment:
+#     python -m venv .venv
+#     source .venv/bin/activate        # Linux/macOS
+#     .venv\Scripts\Activate.ps1       # Windows PowerShell
+#     pip install -r requirements.txt
+#
+# These cover BOTH notebooks' Python side (CPU baselines + DuckDB + DataFusion).
+# The GPU notebook additionally needs the CUDA Toolkit (nvcc) installed at the
+# SYSTEM level — that is NOT a pip package; see RUN_LOCALLY.md, Section 3.
+
+duckdb>=1.0,<2
+datafusion>=40
+pyarrow>=14
+numpy>=1.24
+pandas>=2.0
+matplotlib>=3.7
+
+# To open and run the .ipynb files locally (skip if you use the VS Code Jupyter extension):
+jupyterlab>=4.0
+ipykernel>=6.0
