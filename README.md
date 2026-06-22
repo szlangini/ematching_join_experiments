@@ -18,6 +18,41 @@ so it is written in Rust and stores its data in **Apache Arrow** record batches
 
 ---
 
+## Installation & how to run
+
+```sh
+git clone git@github.com:szlangini/ematching_join_experiments.git
+cd ematching_join_experiments
+```
+
+Three ways to run, in increasing setup cost. **Full per-OS details (Linux/Windows,
+CUDA toolkit, troubleshooting) are in [`RUN_LOCALLY.md`](RUN_LOCALLY.md).**
+
+**1. Rust CPU benchmark** — the core result (hash join vs backtracking). Needs the
+[Rust toolchain](https://rustup.rs):
+
+```sh
+cargo run --release      # prints the table + writes results.csv
+cargo test               # unit tests incl. the set-equality property
+```
+
+**2. Portable CPU-only notebook** (`laptop_ematching_bench.ipynb`) — pure Python,
+no compiler, no GPU; runs on any Windows/macOS/Linux laptop:
+
+```sh
+python -m venv .venv && source .venv/bin/activate    # Windows: .venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+jupyter lab          # open the notebook and Run all  (or open it in VS Code)
+```
+
+Compares backtracking, hash join, leapfrog triejoin, **DuckDB**, and **DataFusion**.
+
+**3. GPU notebook** (`colab_ematching_gpu.ipynb`) — adds the CUDA verticals; needs
+an NVIDIA GPU + the CUDA toolkit (`nvcc`). Easiest on
+[Google Colab](https://colab.research.google.com) (free T4); for a local GPU
+follow [`RUN_LOCALLY.md`](RUN_LOCALLY.md) §3. Gives the full nine-vertical
+CPU-vs-GPU comparison (hand-written CPU/GPU + DuckDB + DataFusion; Sirius skippable).
+
 ## What e-matching is, briefly
 
 An **e-graph** compactly represents a (possibly huge) set of equivalent terms.
@@ -160,7 +195,10 @@ src/
 cuda/
   ematching_gpu.cu  CPU+GPU benchmark: all six matchers (incl. Leapfrog Triejoin) in one binary (see cuda/README.md)
   README.md         build/run/verify + how it feeds from the Arrow columns
-colab_ematching_gpu.ipynb   ready-to-run Google Colab notebook (free GPU) for the cuda/ benchmark
+colab_ematching_gpu.ipynb     GPU orchestrator notebook: 9 verticals (hand-written + DuckDB + DataFusion + Sirius)
+laptop_ematching_bench.ipynb  portable CPU-only notebook (pip only, any OS)
+requirements.txt              Python deps for the notebooks
+RUN_LOCALLY.md                run the notebooks locally (Linux/Windows, CUDA toolkit, troubleshooting)
 ```
 
 ## Honest scope and limitations
